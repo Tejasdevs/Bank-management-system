@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: bms
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+  backend:
+    build: .
+    command: npm run dev
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+volumes:
+  db-data:

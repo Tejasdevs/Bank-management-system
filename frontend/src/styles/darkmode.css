@@ -1,0 +1,410 @@
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.dark-mode-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background: #1a1a2e;
+  color: #f5f5f5;
+}
+
+/* All Pages Dark Mode Background - Exact class names */
+body.dark-mode .statements-page,
+body.dark-mode .budget-page,
+body.dark-mode .savings-page,
+body.dark-mode .help-page,
+body.dark-mode .about-page,
+body.dark-mode .sip-calculator-page,
+body.dark-mode .my-investments-page,
+body.dark-mode .payment-requests-page {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+}
+
+/* Page Headers - Keep gradient visible */
+body.dark-mode .page-header {
+  background: transparent;
+}
+
+body.dark-mode .page-title,
+body.dark-mode h1 {
+  color: #ffffff;
+}
+
+body.dark-mode .dashboard {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+body.dark-mode .dashboard-header {
+  background: rgba(30, 30, 46, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .dashboard-header h2 {
+  color: #ffffff;
+}
+
+body.dark-mode .logout-btn {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+body.dark-mode .logout-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* Investment Modal Dark Mode */
+body.dark-mode .investment-summary {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+body.dark-mode .investment-summary h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .summary-description {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-mode .investment-details {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .detail-row {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .detail-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .detail-value {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-mode .investment-note {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .investment-note p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-mode .account-card {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .account-number,
+body.dark-mode .account-type {
+  color: #ffffff;
+}
+
+body.dark-mode .balance {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+body.dark-mode .refresh-btn {
+  background: rgba(102, 126, 234, 0.2);
+  color: #a5b4fc;
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+body.dark-mode .refresh-btn:hover {
+  background: rgba(102, 126, 234, 0.3);
+}
+
+body.dark-mode .transaction-form {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .transaction-form h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .transaction-form input,
+body.dark-mode .transaction-form select,
+body.dark-mode .deposit-type-select {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+body.dark-mode .transaction-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .deposit-type-select {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000000;
+  font-weight: 700;
+  text-shadow: none;
+}
+
+body.dark-mode .deposit-type-select option {
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+}
+
+body.dark-mode .transaction-form button[type="submit"] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+body.dark-mode .transactions-section {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .transactions-section h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .transaction-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .transaction-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .transaction-type {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+body.dark-mode .transaction-amount.positive {
+  color: #6ee7b7;
+}
+
+body.dark-mode .transaction-amount.negative {
+  color: #fca5a5;
+}
+
+body.dark-mode .transaction-date {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Notification Bell Dark Mode */
+body.dark-mode .notification-bell-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .notification-bell-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .notification-dropdown {
+  background: #1e1e2e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .notification-item {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .notification-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .notif-message {
+  color: #ffffff;
+}
+
+body.dark-mode .notif-time {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Profile Settings Dark Mode */
+body.dark-mode .profile-avatar {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .profile-dropdown {
+  background: #1e1e2e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .profile-menu-item {
+  color: #ffffff;
+}
+
+body.dark-mode .profile-menu-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .profile-modal {
+  background: #1e1e2e;
+}
+
+body.dark-mode .modal-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .modal-header h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .form-input {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+body.dark-mode .form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .modal-footer {
+  background: rgba(255, 255, 255, 0.03);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .btn-cancel {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+body.dark-mode .btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Hamburger Menu Dark Mode */
+body.dark-mode .hamburger-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .menu-panel {
+  background: #ffffff;
+}
+
+body.dark-mode .menu-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+body.dark-mode .menu-header h2 {
+  color: #ffffff;
+}
+
+body.dark-mode .menu-close {
+  color: #ffffff;
+}
+
+body.dark-mode .menu-item {
+  color: #1e293b;
+}
+
+body.dark-mode .menu-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+body.dark-mode .menu-item-logout {
+  color: #f59e0b;
+}
+
+body.dark-mode .menu-item-danger {
+  color: #ef4444;
+}
+
+/* Modals Dark Mode */
+body.dark-mode .modal-content {
+  background: #1e1e2e;
+}
+
+body.dark-mode .modal-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .modal-header h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .modal-body {
+  color: #ffffff;
+}
+
+body.dark-mode .modal-message {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-mode .modal-details {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .detail-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .detail-value {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+body.dark-mode .detail-row {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .modal-footer {
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .modal-btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+body.dark-mode .modal-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* SIP Tab Buttons Dark Mode */
+body.dark-mode .tab-btn {
+  background: #e5e7eb !important;
+  border: 2px solid #d1d5db !important;
+  color: #374151 !important;
+  font-weight: 700 !important;
+}
+
+body.dark-mode .tab-btn.active {
+  color: white !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-color: #667eea !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6) !important;
+}
+
+body.dark-mode .tab-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+}
