@@ -1,12 +1,23 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import client, { setAuthToken } from "../api/apiClient";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [infoMessage, setInfoMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if redirected with a message (e.g., session expired)
+    if (location.state?.message) {
+      setInfoMessage(location.state.message);
+      // Clear the message after 5 seconds
+      setTimeout(() => setInfoMessage(""), 5000);
+    }
+  }, [location]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -71,6 +82,7 @@ export default function Login() {
           </div>
 
           {error && <div className="error-alert">{error}</div>}
+          {infoMessage && <div className="info-alert">{infoMessage}</div>}
 
           <form onSubmit={handleLogin} className="modern-form">
             <div className="form-group">

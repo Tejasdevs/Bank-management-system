@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import client, { setAuthToken } from "../api/apiClient";
 import { ConfirmModal, SuccessToast, ErrorToast } from "../components/Modal";
+import SessionTimeout from "../components/SessionTimeout";
 import HamburgerMenu from "../components/HamburgerMenu";
 import NotificationBell from "../components/NotificationBell";
 import ProfileSettings from "../components/ProfileSettings";
@@ -330,6 +331,9 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
+      {/* Session Timeout Component */}
+      <SessionTimeout timeout={900000} />
+      
       <div className="dashboard-header">
         <h2>Welcome, {user?.name}!</h2>
         <div className="header-actions">

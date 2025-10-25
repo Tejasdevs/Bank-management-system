@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import AnimatedBackground from "./components/AnimatedBackground";
 import "./styles/style.css";
 import "./styles/home.css";
+import "./styles/sessionTimeout.css";
 
 export default function App() {
   const location = useLocation();
