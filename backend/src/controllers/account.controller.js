@@ -28,13 +28,48 @@ export const getUserAccounts = async (req, res, next) => {
 export const getAccountTransactions = async (req, res, next) => {
   try {
     const { accountId } = req.params;
+    console.log(`Fetching transactions for account: ${accountId}, user: ${req.user.id}`);
+    
+    // Verify account exists and belongs to user
+    const account = await Account.findOne({
+      where: { id: accountId, userId: req.user.id }
+    });
+    
+    if (!account) {
+      console.log(`Account not found or access denied: ${accountId}`);
+      return res.status(404).json({ message: 'Account not found or access denied' });
+    }
+    
+    // Get transactions with related account info
     const transactions = await Transaction.findAll({ 
       where: { accountId },
       order: [['createdAt', 'DESC']],
-      limit: 50
+      limit: 100, // Limit to 100 most recent transactions
+      raw: true // Get plain objects instead of model instances
     });
-    res.json(transactions);
-  } catch (err) { next(err); }
+    
+    console.log(`Found ${transactions.length} transactions for account ${accountId}`);
+    
+    // Format the response with related account numbers
+    const formattedTransactions = await Promise.all(transactions.map(async (tx) => {
+      if (tx.relatedAccountId) {
+        const relatedAccount = await Account.findByPk(tx.relatedAccountId, {
+          attributes: ['accountNumber'],
+          raw: true
+        });
+        return {
+          ...tx,
+          relatedAccountNumber: relatedAccount?.accountNumber || null
+        };
+      }
+      return tx;
+    }));
+
+    res.json(formattedTransactions);
+  } catch (err) { 
+    console.error('Error in getAccountTransactions:', err);
+    next(err); 
+  }
 };
 
 export const freezeAccount = async (req, res, next) => {

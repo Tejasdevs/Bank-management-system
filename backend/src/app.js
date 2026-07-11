@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth.routes.js";
 import accountRoutes from "./routes/account.routes.js";
 import transactionRoutes from "./routes/transaction.routes.js";
 import paymentRequestRoutes from "./routes/paymentRequest.routes.js";
+import healthRouter from "./routes/index.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(apiLimiter);
 
 app.get("/", (req, res) => res.json({ message: "BMS API running" }));
 
+app.use("/api/health", healthRouter);
 app.use("/api/auth", authRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/transactions", transactionRoutes);

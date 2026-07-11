@@ -1,6 +1,6 @@
 import React from "react";
 
-export function ConfirmModal({ isOpen, onClose, onConfirm, title, message, details }) {
+export function ConfirmModal({ isOpen, onClose, onConfirm, title, message, details, children, confirmDisabled = false }) {
   if (!isOpen) return null;
 
   return (
@@ -23,13 +23,14 @@ export function ConfirmModal({ isOpen, onClose, onConfirm, title, message, detai
               ))}
             </div>
           )}
+          {children}
         </div>
         
         <div className="modal-footer">
           <button className="modal-btn modal-btn-cancel" onClick={onClose}>
             Cancel
           </button>
-          <button className="modal-btn modal-btn-confirm" onClick={onConfirm}>
+          <button className="modal-btn modal-btn-confirm" onClick={onConfirm} disabled={confirmDisabled}>
             Confirm
           </button>
         </div>

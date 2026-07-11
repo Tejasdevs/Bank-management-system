@@ -20,12 +20,15 @@ export default function Dashboard() {
   // Transaction form states
   const [depositAmount, setDepositAmount] = useState("");
   const [depositNarration, setDepositNarration] = useState("");
+  const [depositPassword, setDepositPassword] = useState("");
   const [depositType, setDepositType] = useState("main"); // "main" or "savings"
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [withdrawNarration, setWithdrawNarration] = useState("");
+  const [withdrawPassword, setWithdrawPassword] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [transferTo, setTransferTo] = useState("");
   const [transferNarration, setTransferNarration] = useState("");
+  const [transferPassword, setTransferPassword] = useState("");
   
   // Modal states
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -84,10 +87,14 @@ export default function Dashboard() {
 
   async function fetchTransactions(accountId) {
     try {
+      console.log(`Fetching transactions for account: ${accountId}`);
       const res = await client.get(`/accounts/${accountId}/transactions`);
-      setTransactions(res.data);
+      console.log('Transactions received:', res.data);
+      setTransactions(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching transactions:', err);
+      setToastMessage('Failed to load transactions: ' + (err.response?.data?.message || err.message));
+      setShowErrorToast(true);
     }
   }
 
@@ -107,7 +114,8 @@ export default function Dashboard() {
         await client.post("/transactions/deposit", { 
           accountId: selectedAccount.id, 
           amount: amount,
-          narration: depositNarration || "Deposit"
+          narration: depositNarration || "Deposit",
+          password: depositPassword
         });
         setToastMessage("Deposit successful!");
         setShowSuccessToast(true);
@@ -120,7 +128,8 @@ export default function Dashboard() {
         await client.post("/transactions/withdraw", { 
           accountId: selectedAccount.id, 
           amount: amount,
-          narration: goalNarration
+          narration: goalNarration,
+          password: depositPassword
         });
         setToastMessage("Amount deducted and added to savings goal!");
         setShowSuccessToast(true);
@@ -128,6 +137,7 @@ export default function Dashboard() {
       
       setDepositAmount("");
       setDepositNarration("");
+      setDepositPassword("");
       setDepositType("main");
       fetchAccounts();
       fetchTransactions(selectedAccount.id);
@@ -151,12 +161,14 @@ export default function Dashboard() {
       await client.post("/transactions/withdraw", { 
         accountId: selectedAccount.id, 
         amount: amount,
-        narration: withdrawNarration || "Withdrawal"
+        narration: withdrawNarration || "Withdrawal",
+        password: withdrawPassword
       });
       setToastMessage("Withdrawal successful!");
       setShowSuccessToast(true);
       setWithdrawAmount("");
       setWithdrawNarration("");
+      setWithdrawPassword("");
       fetchAccounts();
       fetchTransactions(selectedAccount.id);
     } catch (err) {
@@ -180,13 +192,15 @@ export default function Dashboard() {
         fromAccountId: selectedAccount.id, 
         toAccountNumber: transferTo,
         amount: amount,
-        narration: transferNarration || "Transfer"
+        narration: transferNarration || "Transfer",
+        password: transferPassword
       });
       setToastMessage("Transfer successful!");
       setShowSuccessToast(true);
       setTransferAmount("");
       setTransferTo("");
       setTransferNarration("");
+      setTransferPassword("");
       fetchAccounts();
       fetchTransactions(selectedAccount.id);
     } catch (err) {
@@ -499,17 +513,21 @@ export default function Dashboard() {
                     } else if (tx.type === 'withdraw') {
                       isMoneyIn = false;
                     } else if (tx.type === 'transfer') {
-                      // Check if this is money received (balance increased) or sent (balance decreased)
-                      // If relatedAccountId exists, it means this is a transfer
-                      // We need to check if the balance went up or down
-                      const prevTransaction = transactions[transactions.indexOf(tx) + 1];
-                      if (prevTransaction) {
-                        isMoneyIn = parseFloat(tx.balanceAfter) > parseFloat(prevTransaction.balanceAfter);
+                      // For transfers, check if the amount is negative (outgoing) or positive (incoming)
+                      // Also check if the narration indicates an outgoing transfer
+                      const isOutgoing = parseFloat(tx.amount) < 0 || 
+                                      (tx.narration && tx.narration.toLowerCase().includes('transfer to'));
+                      
+                      if (isOutgoing) {
+                        isMoneyIn = false;
+                        displayType = 'transfer-out';
                       } else {
-                        // First transaction or can't determine, check if balance increased
-                        isMoneyIn = tx.relatedAccountId && parseFloat(tx.balanceAfter) >= parseFloat(tx.amount);
+                        isMoneyIn = true;
+                        displayType = 'transfer-in';
                       }
-                      displayType = isMoneyIn ? 'transfer-in' : 'transfer-out';
+                      
+                      // For display, we want to show the absolute value of the amount
+                      tx.amount = Math.abs(parseFloat(tx.amount)).toFixed(2);
                     }
                     
                     return (
@@ -543,45 +561,117 @@ export default function Dashboard() {
       {/* Modals */}
       <ConfirmModal
         isOpen={showDepositModal}
-        onClose={() => setShowDepositModal(false)}
+        onClose={() => { setShowDepositModal(false); setDepositPassword(""); }}
         onConfirm={confirmDeposit}
+        confirmDisabled={!depositPassword}
         title="Confirm Deposit"
-        message="Please review the deposit details below:"
+        message="Please review the deposit details and enter your login password."
         details={selectedAccount && depositAmount ? [
           { label: "Account", value: selectedAccount.accountNumber },
           { label: "Amount", value: `₹${parseFloat(depositAmount).toFixed(2)}` },
           { label: "Current Balance", value: `₹${parseFloat(selectedAccount.balance).toFixed(2)}` },
           { label: "New Balance", value: `₹${(parseFloat(selectedAccount.balance) + parseFloat(depositAmount)).toFixed(2)}` }
         ] : []}
-      />
+      >
+        <div className="form-group" style={{ marginTop: "15px" }}>
+          <label htmlFor="depositPassword" className="detail-label">Login password:</label>
+          <input
+            id="depositPassword"
+            type="password"
+            className="form-control"
+            value={depositPassword}
+            onChange={e => setDepositPassword(e.target.value)}
+            placeholder="Enter your password"
+            autoFocus
+          />
+        </div>
+      </ConfirmModal>
 
       <ConfirmModal
         isOpen={showWithdrawModal}
-        onClose={() => setShowWithdrawModal(false)}
+        onClose={() => { setShowWithdrawModal(false); setWithdrawPassword(""); }}
         onConfirm={confirmWithdraw}
+        confirmDisabled={!withdrawPassword}
         title="Confirm Withdrawal"
-        message="Please review the withdrawal details below:"
+        message="Please review the withdrawal details and enter your login password."
         details={selectedAccount && withdrawAmount ? [
           { label: "Account", value: selectedAccount.accountNumber },
           { label: "Amount", value: `₹${parseFloat(withdrawAmount).toFixed(2)}` },
           { label: "Current Balance", value: `₹${parseFloat(selectedAccount.balance).toFixed(2)}` },
           { label: "New Balance", value: `₹${(parseFloat(selectedAccount.balance) - parseFloat(withdrawAmount)).toFixed(2)}` }
         ] : []}
-      />
+      >
+        <div className="form-group" style={{ marginTop: "15px" }}>
+          <label htmlFor="withdrawPassword" className="detail-label">Login password:</label>
+          <input
+            id="withdrawPassword"
+            type="password"
+            className="form-control"
+            value={withdrawPassword}
+            onChange={e => setWithdrawPassword(e.target.value)}
+            placeholder="Enter your password"
+            autoFocus
+          />
+        </div>
+      </ConfirmModal>
 
-      <ConfirmModal
-        isOpen={showTransferModal}
-        onClose={() => setShowTransferModal(false)}
-        onConfirm={confirmTransfer}
-        title="Confirm Transfer"
-        message="Are you sure you want to transfer this amount?"
-        details={selectedAccount && transferAmount && transferTo ? [
-          { label: "From Account", value: selectedAccount.accountNumber },
-          { label: "To Account", value: transferTo },
-          { label: "Amount", value: `₹${parseFloat(transferAmount).toFixed(2)}` },
-          { label: "Current Balance", value: `₹${parseFloat(selectedAccount.balance).toFixed(2)}` }
-        ] : []}
-      />
+      <div className="modal-overlay" style={{ display: showTransferModal ? 'flex' : 'none' }}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h3>Confirm Transfer</h3>
+          </div>
+          
+          <div className="modal-body">
+            <p className="modal-message">Please confirm the transfer details and enter your login password.</p>
+            
+            {selectedAccount && transferAmount && transferTo && (
+              <div className="modal-details">
+                <div className="detail-row">
+                  <span className="detail-label">From Account:</span>
+                  <span className="detail-value">{selectedAccount.accountNumber}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="detail-label">To Account:</span>
+                  <span className="detail-value">{transferTo}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="detail-label">Amount:</span>
+                  <span className="detail-value">₹{parseFloat(transferAmount).toFixed(2)}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="detail-label">Current Balance:</span>
+                  <span className="detail-value">₹{parseFloat(selectedAccount.balance).toFixed(2)}</span>
+                </div>
+                <div className="form-group" style={{ marginTop: '15px' }}>
+                  <label htmlFor="transferPassword" className="detail-label">Login password:</label>
+                  <input
+                    id="transferPassword"
+                    type="password"
+                    className="form-control"
+                    value={transferPassword}
+                    onChange={(e) => setTransferPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    autoFocus
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div className="modal-footer">
+            <button className="modal-btn modal-btn-cancel" onClick={() => { setShowTransferModal(false); setTransferPassword(""); }}>
+              Cancel
+            </button>
+            <button 
+              className="modal-btn modal-btn-confirm" 
+              onClick={confirmTransfer}
+              disabled={!transferPassword}
+            >
+              Confirm Transfer
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Delete Transactions Confirmation Modal */}
       <ConfirmModal

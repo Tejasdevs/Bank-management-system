@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 
 export default (sequelize) => {
-  return sequelize.define("Transaction", {
+  const Transaction = sequelize.define("Transaction", {
     id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
     accountId: { type: DataTypes.BIGINT, allowNull: false },
     type: { type: DataTypes.ENUM("deposit","withdraw","transfer","fee","interest"), allowNull: false },
@@ -14,4 +14,16 @@ export default (sequelize) => {
     tableName: "transactions",
     timestamps: true
   });
+
+  // Define association with Account model for relatedAccount
+  Transaction.associate = (models) => {
+    Transaction.belongsTo(models.Account, {
+      as: 'relatedAccount',
+      foreignKey: 'relatedAccountId',
+      onDelete: 'SET NULL',
+      hooks: true
+    });
+  };
+
+  return Transaction;
 };

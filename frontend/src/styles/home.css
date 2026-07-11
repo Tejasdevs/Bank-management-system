@@ -1,11 +1,10 @@
-/* Home Page Styles */
+
 .home-page {
   min-height: 100vh;
   background: transparent;
   position: relative;
 }
 
-/* Hero Section */
 .hero-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -452,7 +451,6 @@
   line-height: 1.6;
 }
 
-/* CTA Section */
 .cta-section {
   padding: 100px 40px;
   text-align: center;
@@ -511,7 +509,7 @@
   transform: translateX(8px);
 }
 
-/* Footer */
+
 .home-footer {
   padding: 40px;
   text-align: center;
@@ -528,7 +526,7 @@
   font-weight: 500;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1024px) {
   .hero-section {
     grid-template-columns: 1fr;

@@ -76,27 +76,33 @@ export default function AccountStatements() {
     let totalTransfersOut = 0;
 
     filteredTransactions.forEach(txn => {
-      const amount = parseFloat(txn.amount);
+      const amount = Math.abs(parseFloat(txn.amount));
       
       if (txn.type === 'deposit') {
         totalDeposits += amount;
       } else if (txn.type === 'withdraw') {
         totalWithdrawals += amount;
       } else if (txn.type === 'transfer') {
-        if (txn.toAccountId === selectedAccount?.id) {
-          totalTransfersIn += amount;
-        } else {
+        // Check if this is an incoming or outgoing transfer
+        const isOutgoing = parseFloat(txn.amount) < 0 || 
+                         (txn.narration && txn.narration.toLowerCase().includes('transfer to'));
+        
+        if (isOutgoing) {
           totalTransfersOut += amount;
+        } else {
+          totalTransfersIn += amount;
         }
       }
     });
 
+    const netChange = (totalDeposits + totalTransfersIn) - (totalWithdrawals + totalTransfersOut);
+    
     return {
       totalDeposits,
       totalWithdrawals,
       totalTransfersIn,
       totalTransfersOut,
-      netChange: totalDeposits + totalTransfersIn - totalWithdrawals - totalTransfersOut
+      netChange
     };
   };
 
@@ -277,19 +283,36 @@ export default function AccountStatements() {
                 </thead>
                 <tbody>
                   {filteredTransactions.map(txn => {
-                    const isMoneyIn = txn.type === 'deposit' || 
-                                     (txn.type === 'transfer' && txn.toAccountId === selectedAccount?.id);
+                    // For transfers, check if this is an incoming or outgoing transfer
+                    let displayType = txn.type;
+                    let isMoneyIn = txn.type === 'deposit';
+                    
+                    if (txn.type === 'transfer') {
+                      // Check if the amount is negative (outgoing) or if narration indicates an outgoing transfer
+                      const isOutgoing = parseFloat(txn.amount) < 0 || 
+                                      (txn.narration && txn.narration.toLowerCase().includes('transfer to'));
+                      
+                      if (isOutgoing) {
+                        displayType = 'transfer_out';
+                        isMoneyIn = false;
+                      } else {
+                        displayType = 'transfer_in';
+                        isMoneyIn = true;
+                      }
+                    }
                     
                     return (
                       <tr key={txn.id}>
                         <td>{new Date(txn.createdAt).toLocaleString('en-IN')}</td>
-                        <td className={`type-${txn.type}`}>
-                          {txn.type === 'transfer' 
-                            ? (isMoneyIn ? 'Transfer In' : 'Transfer Out')
-                            : txn.type.charAt(0).toUpperCase() + txn.type.slice(1)}
+                        <td className={`type-${displayType}`}>
+                          {displayType === 'transfer_in' 
+                            ? 'Transfer In' 
+                            : displayType === 'transfer_out' 
+                              ? 'Transfer Out' 
+                              : displayType.charAt(0).toUpperCase() + displayType.slice(1)}
                         </td>
                         <td className={isMoneyIn ? 'positive' : 'negative'}>
-                          {isMoneyIn ? '+' : '-'}₹{parseFloat(txn.amount).toFixed(2)}
+                          {isMoneyIn ? '+' : ''}₹{Math.abs(parseFloat(txn.amount)).toFixed(2)}
                         </td>
                         <td>₹{parseFloat(txn.balanceAfter).toFixed(2)}</td>
                         <td>{txn.narration || '-'}</td>

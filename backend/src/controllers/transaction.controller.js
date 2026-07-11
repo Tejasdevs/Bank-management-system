@@ -1,15 +1,43 @@
-import { sequelize, Account, Transaction, Audit } from "../models/index.js";
+import { sequelize, Account, Transaction, Audit, User } from "../models/index.js";
+import bcrypt from "bcrypt";
 
 /**
  * deposit/withdraw/transfer operations must use DB transactions to keep balances consistent
  */
+const verifyLoginPassword = async (userId, password) => {
+  if (!password) {
+    throw { status: 400, message: "Password is required" };
+  }
+
+  const user = await User.findByPk(userId);
+  if (!user?.passwordHash) {
+    throw { status: 404, message: "User not found or invalid user data" };
+  }
+
+  if (!(await bcrypt.compare(password, user.passwordHash))) {
+    throw { status: 401, message: "Invalid password" };
+  }
+};
+
 export const deposit = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
-    const { accountId, amount, narration } = req.body;
-    const account = await Account.findByPk(accountId, { transaction: t, lock: t.LOCK.UPDATE });
-    if (!account) throw { status: 404, message: "Account not found" };
+    console.log('Deposit request:', req.body);
+    const { accountId, amount, narration, password } = req.body;
+    await verifyLoginPassword(req.user.id, password);
+    const account = await Account.findByPk(accountId, { 
+      transaction: t, 
+      lock: t.LOCK.UPDATE 
+    });
+    
+    if (!account) {
+      console.log('Account not found:', accountId);
+      throw { status: 404, message: "Account not found" };
+    }
+    
     const newBalance = parseFloat(account.balance) + parseFloat(amount);
+    console.log(`Updating balance from ${account.balance} to ${newBalance}`);
+    
     account.balance = newBalance;
     await account.save({ transaction: t });
 
@@ -18,7 +46,7 @@ export const deposit = async (req, res, next) => {
       type: "deposit",
       amount,
       balanceAfter: newBalance,
-      narration
+      narration: narration || "Deposit"
     }, { transaction: t });
 
     await Audit.create({
@@ -31,8 +59,10 @@ export const deposit = async (req, res, next) => {
     }, { transaction: t });
 
     await t.commit();
+    console.log('Deposit successful:', txn.toJSON());
     res.json(txn);
   } catch (err) {
+    console.error('Deposit error:', err);
     await t.rollback();
     next(err);
   }
@@ -41,7 +71,8 @@ export const deposit = async (req, res, next) => {
 export const withdraw = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
-    const { accountId, amount, narration } = req.body;
+    const { accountId, amount, narration, password } = req.body;
+    await verifyLoginPassword(req.user.id, password);
     const account = await Account.findByPk(accountId, { transaction: t, lock: t.LOCK.UPDATE });
     if (!account) throw { status: 404, message: "Account not found" };
     if (parseFloat(account.balance) < parseFloat(amount)) throw { status: 400, message: "Insufficient funds" };
@@ -77,7 +108,9 @@ export const withdraw = async (req, res, next) => {
 export const transfer = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
-    const { fromAccountId, toAccountNumber, amount, narration } = req.body;
+    const { fromAccountId, toAccountNumber, amount, narration, password } = req.body;
+    
+    await verifyLoginPassword(req.user.id, password);
     const from = await Account.findByPk(fromAccountId, { transaction: t, lock: t.LOCK.UPDATE });
     if (!from) throw { status: 404, message: "From account not found" };
     if (parseFloat(from.balance) < parseFloat(amount)) throw { status: 400, message: "Insufficient funds" };
@@ -96,10 +129,10 @@ export const transfer = async (req, res, next) => {
     const txn1 = await Transaction.create({
       accountId: from.id,
       type: "transfer",
-      amount,
+      amount: -amount, // Negative amount for sender
       relatedAccountId: to.id,
       balanceAfter: from.balance,
-      narration
+      narration: `Transfer to ${to.accountNumber}`
     }, { transaction: t });
 
     const txn2 = await Transaction.create({
