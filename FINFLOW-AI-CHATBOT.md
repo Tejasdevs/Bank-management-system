@@ -69,6 +69,36 @@ Added automatic language and tone matching.
 * Response tone matches the user's communication style.
 * Banking conversations maintain a professional and secure tone regardless of language.
 
+### September 4, 2026 — Conversation History
+
+Added **Conversation History** functionality to the FinFlow AI Banking Support Assistant.
+
+Users can now:
+
+* View their previous chatbot conversations.
+* Access earlier banking support conversations.
+* Continue a previous conversation.
+* Resume an earlier support discussion instead of starting from the beginning.
+
+### Conversation History Improvements
+
+* Added support for viewing previous conversations.
+* Added support for continuing existing conversations.
+* Improved conversation continuity.
+* Reduced the need for users to repeat information from previous conversations.
+* Improved the overall chatbot support experience.
+
+### Testing
+
+* Tested viewing previous conversations.
+* Tested opening an existing conversation.
+* Tested continuing a previous conversation.
+* Verified that users can resume previous support conversations successfully.
+
+### Result
+
+The chatbot now provides a more continuous support experience by allowing users to **view and continue previous conversations**.
+
 ---
 
 ## 🧠 Current Bot Behavior
@@ -89,6 +119,7 @@ The chatbot currently provides **support and guidance** rather than performing f
 * Clear clarification when information is incomplete
 * Human escalation when required
 * Language and tone matching
+* Conversation history and continuity
 * Professional banking communication
 
 ---
@@ -105,6 +136,19 @@ The chatbot automatically adapts to the user's language.
 | Hindi + English | Natural Hinglish |
 
 The chatbot does not unnecessarily switch languages and keeps commonly used banking and technical terms in English when appropriate.
+
+---
+
+## 💬 Conversation History
+
+The chatbot supports conversation continuity by allowing users to:
+
+* View previous conversations.
+* Open an earlier conversation.
+* Continue an existing conversation.
+* Resume previous support discussions.
+
+This allows users to return to an earlier banking-support conversation without unnecessarily starting a new discussion.
 
 ---
 
@@ -156,6 +200,8 @@ Whenever the chatbot is improved:
 * Add more advanced customer-support workflows
 * Improve escalation and support-ticket handling
 * Expand multilingual support
+* Improve conversation context and personalization
+* Add additional banking-support automation where supported
 
 ---
 
@@ -167,6 +213,8 @@ Whenever the chatbot is improved:
 
 The chatbot is currently deployed through Botpress Webchat and provides secure, Knowledge Base-driven support for the FinFlow/BMS website.
 
+The assistant now supports **language and tone matching** as well as **previous conversation viewing and continuation**.
+
 ---
 
 ## 📅 Version History
@@ -176,3 +224,4 @@ The chatbot is currently deployed through Botpress Webchat and provides secure, 
 | v0.1    | September 2, 2026 | Initial BMS AI Banking Support Assistant, security rules, Knowledge Base setup and Webchat integration | ✅      |
 | v0.2    | September 3, 2026 | Expanded Knowledge Base, banking support coverage and troubleshooting guidance                         | ✅      |
 | v0.3    | September 4, 2026 | Added automatic language and tone matching for English, Hindi and Hinglish                             | ✅      |
+| v0.4    | September 4, 2026 | Added Conversation History with previous conversation viewing and continuation                         | ✅      |
