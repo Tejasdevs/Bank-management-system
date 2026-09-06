@@ -19,43 +19,59 @@ The assistant provides friendly, professional, secure, and Knowledge Base-driven
 
 ### September 2, 2026 — Initial Chatbot
 
-* Created the **BMS AI Banking Support Assistant** using Botpress Studio.
-* Configured the chatbot as a friendly, professional and secure banking support assistant.
-* Added support for:
+Created the **BMS AI Banking Support Assistant** using Botpress Studio.
 
-  * Account management
-  * Balance-related guidance
-  * Deposits
-  * Withdrawals
-  * Fund transfers
-  * Transaction history
-  * Login and authentication
-  * Troubleshooting
-  * Human support escalation
-* Added strict **anti-hallucination rules**.
-* Prevented the bot from inventing balances, transactions, fees, limits or account information.
-* Added financial security rules preventing the chatbot from requesting:
+Configured the chatbot as a friendly, professional and secure banking support assistant.
 
-  * Passwords
-  * PINs
-  * OTPs
-  * CVVs
-  * Full card numbers
-  * Other sensitive financial credentials
-* Added transaction-safety rules.
-* Added out-of-scope handling for unrelated questions.
-* Added context-aware conversation and clarification behavior.
-* Added fallback and human-escalation behavior.
-* Integrated Botpress Webchat into the FinFlow website.
-* Published and verified the chatbot integration.
+Added support for:
+
+* Account management
+* Balance-related guidance
+* Deposits
+* Withdrawals
+* Fund transfers
+* Transaction history
+* Login and authentication
+* Troubleshooting
+* Human support escalation
+
+Added strict **anti-hallucination rules**.
+
+Prevented the bot from inventing balances, transactions, fees, limits or account information.
+
+Added financial security rules preventing the chatbot from requesting:
+
+* Passwords
+* PINs
+* OTPs
+* CVVs
+* Full card numbers
+* Other sensitive financial credentials
+
+Added transaction-safety rules.
+
+Added out-of-scope handling for unrelated questions.
+
+Added context-aware conversation and clarification behavior.
+
+Added fallback and human-escalation behavior.
+
+Integrated Botpress Webchat into the FinFlow website.
+
+Published and verified the chatbot integration.
+
+---
 
 ### September 3, 2026 — Knowledge Base Expansion
 
-* Expanded the BMS Knowledge Base with additional banking support information.
+Expanded the BMS Knowledge Base with additional banking support information.
+
 * Improved coverage for account, transaction and troubleshooting questions.
 * Added clearer handling for unsupported and unavailable information.
 * Improved Knowledge Base-driven responses.
 * Strengthened the distinction between verified information and unsupported assumptions.
+
+---
 
 ### September 4, 2026 — Language & Tone Matching
 
@@ -69,6 +85,8 @@ Added automatic language and tone matching.
 * Response tone matches the user's communication style.
 * Banking conversations maintain a professional and secure tone regardless of language.
 
+---
+
 ### September 4, 2026 — Conversation History
 
 Added **Conversation History** functionality to the FinFlow AI Banking Support Assistant.
@@ -80,7 +98,7 @@ Users can now:
 * Continue a previous conversation.
 * Resume an earlier support discussion instead of starting from the beginning.
 
-### Conversation History Improvements
+#### Conversation History Improvements
 
 * Added support for viewing previous conversations.
 * Added support for continuing existing conversations.
@@ -88,16 +106,45 @@ Users can now:
 * Reduced the need for users to repeat information from previous conversations.
 * Improved the overall chatbot support experience.
 
-### Testing
+#### Testing
 
 * Tested viewing previous conversations.
 * Tested opening an existing conversation.
 * Tested continuing a previous conversation.
 * Verified that users can resume previous support conversations successfully.
 
-### Result
+#### Result
 
 The chatbot now provides a more continuous support experience by allowing users to **view and continue previous conversations**.
+
+---
+
+### September 6, 2026 — File Upload Support
+
+Added **File Upload** functionality to the FinFlow AI Banking Support Assistant.
+
+Users can now:
+
+* Upload files directly in the chatbot conversation.
+* Share relevant files with the assistant.
+* Use uploaded files as part of their support conversation.
+
+#### File Upload Improvements
+
+* Added support for user file uploads within chat.
+* Enabled users to share relevant documents or files during support conversations.
+* Improved the ability to provide context through shared files.
+* Made the support experience more interactive and convenient.
+
+#### Testing
+
+* Tested uploading files in the chatbot.
+* Tested sharing uploaded files within a conversation.
+* Verified that the file-upload functionality works within the chat experience.
+
+#### Result
+
+The chatbot now supports **file uploads**, allowing users to share relevant files directly during their banking support conversations.
 
 ---
 
@@ -120,6 +167,7 @@ The chatbot currently provides **support and guidance** rather than performing f
 * Human escalation when required
 * Language and tone matching
 * Conversation history and continuity
+* File upload and sharing support
 * Professional banking communication
 
 ---
@@ -152,6 +200,20 @@ This allows users to return to an earlier banking-support conversation without u
 
 ---
 
+## 📎 File Upload Support
+
+The chatbot allows users to upload and share files directly within the chat conversation.
+
+Users can use this functionality to:
+
+* Share relevant files during support conversations.
+* Provide additional context for their questions.
+* Continue discussing an issue while sharing supporting files.
+
+> File uploads should only contain information relevant to the support request. Users should never upload passwords, PINs, OTPs, CVVs, full card numbers, or other sensitive financial credentials.
+
+---
+
 ## 🔐 Security & Privacy
 
 The chatbot must never request or ask users to share:
@@ -166,13 +228,19 @@ The chatbot must never request or ask users to share:
 
 The chatbot also must not:
 
-* Invent account balances
-* Invent transaction details
-* Claim a transaction was completed without verification
-* Invent fees, limits or banking policies
-* Provide unsupported financial information
+* Invent account balances.
+* Invent transaction details.
+* Claim a transaction was completed without verification.
+* Invent fees, limits or banking policies.
+* Provide unsupported financial information.
 
 For sensitive or unresolved issues, the chatbot directs users toward appropriate official/human support.
+
+### File Security
+
+Users should not upload sensitive financial credentials or confidential authentication information through the chatbot.
+
+The chatbot should treat uploaded files as user-provided support context and should not make unsupported claims based on their contents.
 
 ---
 
@@ -192,16 +260,17 @@ Whenever the chatbot is improved:
 
 ## 📌 Future Improvements
 
-* Expand the Knowledge Base with detailed BMS FAQs
-* Add more feature-specific documentation
-* Improve troubleshooting workflows
-* Add secure backend/API integration
-* Support authenticated user-specific information
-* Add more advanced customer-support workflows
-* Improve escalation and support-ticket handling
-* Expand multilingual support
-* Improve conversation context and personalization
-* Add additional banking-support automation where supported
+* Expand the Knowledge Base with detailed BMS FAQs.
+* Add more feature-specific documentation.
+* Improve troubleshooting workflows.
+* Add secure backend/API integration.
+* Support authenticated user-specific information.
+* Add more advanced customer-support workflows.
+* Improve escalation and support-ticket handling.
+* Expand multilingual support.
+* Improve conversation context and personalization.
+* Improve file-based support workflows.
+* Add additional banking-support automation where supported.
 
 ---
 
@@ -213,7 +282,13 @@ Whenever the chatbot is improved:
 
 The chatbot is currently deployed through Botpress Webchat and provides secure, Knowledge Base-driven support for the FinFlow/BMS website.
 
-The assistant now supports **language and tone matching** as well as **previous conversation viewing and continuation**.
+The assistant currently supports:
+
+* Language and tone matching
+* Previous conversation viewing and continuation
+* File upload and sharing within conversations
+* Knowledge Base-driven banking support
+* Secure banking-support guidance
 
 ---
 
@@ -225,3 +300,4 @@ The assistant now supports **language and tone matching** as well as **previous 
 | v0.2    | September 3, 2026 | Expanded Knowledge Base, banking support coverage and troubleshooting guidance                         | ✅      |
 | v0.3    | September 4, 2026 | Added automatic language and tone matching for English, Hindi and Hinglish                             | ✅      |
 | v0.4    | September 4, 2026 | Added Conversation History with previous conversation viewing and continuation                         | ✅      |
+| v0.5    | September 6, 2026 | Added File Upload support for sharing files within chatbot conversations                               | ✅      |
